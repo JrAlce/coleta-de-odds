@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparativo de Odds</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f4f6fa;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+header {
+  background: linear-gradient(90deg, #004aad, #0072ff);
+  color: white;
+  padding: 16px;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+  background-color: #eaf1fb;
+  padding: 12px;
+  border-bottom: 2px solid #d4e1fa;
+  flex-wrap: wrap;
+}
+
+.info input {
+  border: none;
+  background: none;
+  border-bottom: 1px solid #aaa;
+  padding: 4px;
+  font-size: 1em;
+  text-align: center;
+  width: 200px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th {
+  background-color: #004aad;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px;
+}
+
+input.odds {
+  width: 80px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.difference { background-color: #ffe8cc; }
+.profit { background-color: #d7fcd7; font-weight:bold; }
+
+.rent-line {
+  background:#f2f6ff;
+  font-weight:bold;
+}
+
+.section-title {
+  background:#e7f0ff;
+  font-weight:600;
+}
+
+.charts-wrapper{
+  display:flex;
+  gap:30px;
+  margin-top:40px;
+  justify-content:center;
+}
+
+.chart-container{
+  background:white;
+  padding:15px;
+  border-radius:14px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  width:480px;
+}
+
+canvas{
+  height:280px !important;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>Comparativo de Odds</header>
+
+<div class="info">
+  <div>Evento: <input type="text" value="Flamengo x São Paulo"></div>
+  <div>Competição: <input type="text" value="Brasileirão Série A"></div>
+  <div>Tempo: <input type="text" value="15 Minutos"></div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Mercado</th>
+<th>joguesports.com</th>
+<th>Bet365</th>
+<th>Diferença</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td colspan="4" class="section-title">Vencedor do Jogo</td></tr>
+<tr data-group="1x2"><td>1</td><td><input class="odds jogue-1x2"></td><td><input class="odds bet-1x2"></td><td class="difference">0</td></tr>
+<tr data-group="1x2"><td>X</td><td><input class="odds jogue-1x2"></td><td><input class="odds bet-1x2"></td><td class="difference">0</td></tr>
+<tr data-group="1x2"><td>2</td><td><input class="odds jogue-1x2"></td><td><input class="odds bet-1x2"></td><td class="difference">0</td></tr>
+<tr class="rent-line"><td>Rentabilidade 1x2</td><td class="profit" id="rentJogue1x2">-</td><td class="profit" id="rentBet1x2">-</td><td></td></tr>
+
+<tr><td colspan="4" class="section-title">Ambas Marcam</td></tr>
+<tr data-group="btts"><td>SIM</td><td><input class="odds jogue-btts"></td><td><input class="odds bet-btts"></td><td class="difference">0</td></tr>
+<tr data-group="btts"><td>NÃO</td><td><input class="odds jogue-btts"></td><td><input class="odds bet-btts"></td><td class="difference">0</td></tr>
+<tr class="rent-line"><td>Rentabilidade Ambas Marcam</td><td class="profit" id="rentJogueBtts">-</td><td class="profit" id="rentBetBtts">-</td><td></td></tr>
+
+<tr><td colspan="4" class="section-title">Total de Gols</td></tr>
+
+<tr data-group="g15"><td>+1.5</td><td><input class="odds jogue-g15"></td><td><input class="odds bet-g15"></td><td class="difference">0</td></tr>
+<tr data-group="g15"><td>-1.5</td><td><input class="odds jogue-g15"></td><td><input class="odds bet-g15"></td><td class="difference">0</td></tr>
+<tr class="rent-line"><td>Rentabilidade +1.5/-1.5</td><td class="profit" id="rentJogueG15">-</td><td class="profit" id="rentBetG15">-</td><td></td></tr>
+
+<tr data-group="g25"><td>+2.5</td><td><input class="odds jogue-g25"></td><td><input class="odds bet-g25"></td><td class="difference">0</td></tr>
+<tr data-group="g25"><td>-2.5</td><td><input class="odds jogue-g25"></td><td><input class="odds bet-g25"></td><td class="difference">0</td></tr>
+<tr class="rent-line"><td>Rentabilidade +2.5/-2.5</td><td class="profit" id="rentJogueG25">-</td><td class="profit" id="rentBetG25">-</td><td></td></tr>
+
+<tr data-group="g35"><td>+3.5</td><td><input class="odds jogue-g35"></td><td><input class="odds bet-g35"></td><td class="difference">0</td></tr>
+<tr data-group="g35"><td>-3.5</td><td><input class="odds jogue-g35"></td><td><input class="odds bet-g35"></td><td class="difference">0</td></tr>
+<tr class="rent-line"><td>Rentabilidade +3.5/-3.5</td><td class="profit" id="rentJogueG35">-</td><td class="profit" id="rentBetG35">-</td><td></td></tr>
+
+</tbody>
+</table>
+</div>
+
+<!-- GRAFICOS EXISTENTES -->
+<div class="charts-wrapper">
+  <div class="chart-container">
+    <h3>Vencedor do Jogo</h3>
+    <canvas id="grafico1x2"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Ambas Marcam</h3>
+    <canvas id="graficoBtts"></canvas>
+  </div>
+</div>
+
+<!-- NOVO GRAFICO TOTAL DE GOLS -->
+<div class="charts-wrapper">
+  <div class="chart-container">
+    <h3>Total de Gols (+)</h3>
+    <canvas id="graficoGolsMais"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Total de Gols (-)</h3>
+    <canvas id="graficoGolsMenos"></canvas>
+  </div>
+</div>
+
+<script>
+const inputs = document.querySelectorAll(".odds");
+
+function calcularGrupo(grupo, classeJogue, classeBet, rentJogueId, rentBetId) {
+  let somaJogue = 0;
+  let somaBet = 0;
+  const linhas = document.querySelectorAll(`tr[data-group='${grupo}']`);
+
+  linhas.forEach(linha => {
+    const jogue = parseFloat(linha.querySelector(`.${classeJogue}`).value);
+    const bet = parseFloat(linha.querySelector(`.${classeBet}`).value);
+    const diffCell = linha.querySelector(".difference");
+
+    if (jogue > 0 && bet > 0) {
+      diffCell.textContent = Math.abs(jogue - bet).toFixed(2);
+    } else {
+      diffCell.textContent = "0";
+    }
+
+    if (jogue > 0) somaJogue += (100 / jogue);
+    if (bet > 0) somaBet += (100 / bet);
+  });
+
+  document.getElementById(rentJogueId).textContent =
+    somaJogue > 0 ? somaJogue.toFixed(2) + "%" : "-";
+
+  document.getElementById(rentBetId).textContent =
+    somaBet > 0 ? somaBet.toFixed(2) + "%" : "-";
+}
+
+const grafico1x2 = new Chart(document.getElementById('grafico1x2'), {
+  type: 'bar',
+  data: {
+    labels: ['1', 'X', '2'],
+    datasets: [
+      { label: 'Joguesports', backgroundColor: 'blue', data: [0,0,0] },
+      { label: 'Bet365', backgroundColor: 'green', data: [0,0,0] }
+    ]
+  },
+  options:{ maintainAspectRatio:false }
+});
+
+const graficoBtts = new Chart(document.getElementById('graficoBtts'), {
+  type: 'bar',
+  data: {
+    labels: ['SIM', 'NÃO'],
+    datasets: [
+      { label: 'Joguesports', backgroundColor: 'blue', data: [0,0] },
+      { label: 'Bet365', backgroundColor: 'green', data: [0,0] }
+    ]
+  },
+  options:{ maintainAspectRatio:false }
+});
+
+const graficoGolsMais = new Chart(document.getElementById('graficoGolsMais'), {
+  type: 'bar',
+  data: {
+    labels: ['+1.5', '+2.5', '+3.5'],
+    datasets: [
+      { label: 'Joguesports', backgroundColor: 'blue', data: [0,0,0] },
+      { label: 'Bet365', backgroundColor: 'green', data: [0,0,0] }
+    ]
+  },
+  options:{ maintainAspectRatio:false }
+});
+
+const graficoGolsMenos = new Chart(document.getElementById('graficoGolsMenos'), {
+  type: 'bar',
+  data: {
+    labels: ['-1.5', '-2.5', '-3.5'],
+    datasets: [
+      { label: 'Joguesports', backgroundColor: 'blue', data: [0,0,0] },
+      { label: 'Bet365', backgroundColor: 'green', data: [0,0,0] }
+    ]
+  },
+  options:{ maintainAspectRatio:false }
+});
+
+function atualizar() {
+  calcularGrupo("1x2","jogue-1x2","bet-1x2","rentJogue1x2","rentBet1x2");
+  calcularGrupo("btts","jogue-btts","bet-btts","rentJogueBtts","rentBetBtts");
+  calcularGrupo("g15","jogue-g15","bet-g15","rentJogueG15","rentBetG15");
+  calcularGrupo("g25","jogue-g25","bet-g25","rentJogueG25","rentBetG25");
+  calcularGrupo("g35","jogue-g35","bet-g35","rentJogueG35","rentBetG35");
+
+  grafico1x2.data.datasets[0].data =
+    Array.from(document.querySelectorAll(".jogue-1x2")).map(i => parseFloat(i.value)||0);
+  grafico1x2.data.datasets[1].data =
+    Array.from(document.querySelectorAll(".bet-1x2")).map(i => parseFloat(i.value)||0);
+  grafico1x2.update();
+
+  graficoBtts.data.datasets[0].data =
+    Array.from(document.querySelectorAll(".jogue-btts")).map(i => parseFloat(i.value)||0);
+  graficoBtts.data.datasets[1].data =
+    Array.from(document.querySelectorAll(".bet-btts")).map(i => parseFloat(i.value)||0);
+  graficoBtts.update();
+
+  graficoGolsMais.data.datasets[0].data = [
+    parseFloat(document.querySelectorAll(".jogue-g15")[0].value)||0,
+    parseFloat(document.querySelectorAll(".jogue-g25")[0].value)||0,
+    parseFloat(document.querySelectorAll(".jogue-g35")[0].value)||0
+  ];
+  graficoGolsMais.data.datasets[1].data = [
+    parseFloat(document.querySelectorAll(".bet-g15")[0].value)||0,
+    parseFloat(document.querySelectorAll(".bet-g25")[0].value)||0,
+    parseFloat(document.querySelectorAll(".bet-g35")[0].value)||0
+  ];
+  graficoGolsMais.update();
+
+  graficoGolsMenos.data.datasets[0].data = [
+    parseFloat(document.querySelectorAll(".jogue-g15")[1].value)||0,
+    parseFloat(document.querySelectorAll(".jogue-g25")[1].value)||0,
+    parseFloat(document.querySelectorAll(".jogue-g35")[1].value)||0
+  ];
+  graficoGolsMenos.data.datasets[1].data = [
+    parseFloat(document.querySelectorAll(".bet-g15")[1].value)||0,
+    parseFloat(document.querySelectorAll(".bet-g25")[1].value)||0,
+    parseFloat(document.querySelectorAll(".bet-g35")[1].value)||0
+  ];
+  graficoGolsMenos.update();
+}
+
+inputs.forEach(i => i.addEventListener("input", atualizar));
+</script>
+
+</body>
+</html>
